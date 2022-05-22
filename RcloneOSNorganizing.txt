@@ -1,0 +1,132 @@
+So this command should work right ?
+
+rclone copy gcrypt2: /share/CACHEDEV1_DATA/Test Data --include /share/CACHEDEV1_DATA/Container --include /share/CACHEDEV1_DATA/Multimedia --include /share/CACHEDEV1_DATA/QmailAgent --include /share/CACHEDEV1_DATA/Web --checkers 3 --fast-list --log-file /share/CACHEDEV1_DATA/rclone/copy.log -v --tpslimit 3 --transfers 3
+
+
+http://manpages.ubuntu.com/manpages/bionic/man1/rclone.1.html
+
+
+function: rclone listremotes #this lists all the remotes in the config file 
+
+rclone moveto src dst
+
+#
+
+rclone --include ".DS_Store" copy "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" -P
+
+
+rclone moveto "NECT-Bornean Frog":/borneanfrog/LM5/ "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/ -P
+
+
+
+https://linuxpip.org/rclone-examples/
+
+
+----
+
+this is the ways to use rclone, locally, or on the cluster.  this was done in windows , but can be the same for mac
+
+
+---- 
+
+this is the basic form of copying files, directory
+this is the basic form of moving files or directories to another folder
+
+this is one filter
+this is another filter
+
+use -P to help seeing progression 
+use -vv for information 
+use --dry-run for running without impacting the data (learn more about it)
+you should use this flag to see what will happen and than 
+
+
+
+advantages in using the cmd option is that there is no limit in time session, however I would assume
+i should be corrected if i am worng, that it is faster using a clister session with more cores
+or gpus being used. 
+
+rclone --include "ML*" copy "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" -P --dry-run
+
+
+general notes:
+i believe that copy mechanism and than delete is faster than a moveto option. the decisoin is yours. 
+
+# moveto is for directories
+
+rclone --include "/LM*" moveto "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/ML*\ "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" -P --dry-run
+
+
+rclone --include LM1/** --include LM33/** moveto "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --dry-run
+
+rclone moveto "NECT-Bornean Frog":/borneanfrog/LM* "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --dry-run
+
+rclone ls "NECT-Bornean Frog":/borneanfrog/ML* 
+
+rclone copy "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --include "{BR4,LM1,LM3,LM4,Sp1,Sp17,Sp22,Sp3}/**" --dry-run #this was to see that the code works
+
+#because it is a problem to transfer or move multiple directories, i ended up copying and than deleting which is faster I believe. 
+#yes this might not be effecient in typing directories of interest, but one can use filterring techniques better, i just couldnt figure it out. 
+#http://manpages.ubuntu.com/manpages/bionic/man1/rclone.1.html
+#https://rclone.org/filtering/
+
+rclone copy "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --include "{BR4,LM1,LM3,LM4,Sp1,Sp17,Sp22,Sp3}/**" -P #code that was executed
+
+#one could use --checkers=N flag, but the default is 8 checkers in parallel. 
+
+rclone tree "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"
+
+
+rclone delete "NECT-Bornean Frog":/borneanfrog -include "{BR4,LM1,LM3,LM4,Sp1,Sp17,Sp22,Sp3}/**" -P #/** for directory 
+
+rclone copy "NECT-Bornean Frog":/borneanfrog -include "{BR4,LM1,LM3,LM4,Sp1,Sp17,Sp22,Sp3}/" --delete-after -P
+
+
+rclone copy "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --include "{testfiles,exampleSHowT}/**" --delete-during --dry-run #make sure no spaces in the include!
+
+rclone delete "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/testfiles
+
+
+
+--del                   an alias for --delete-during
+ --delete                delete extraneous files from dest dirs
+ --delete-before         receiver deletes before transfer (default)
+ --delete-during         receiver deletes during xfer, not before
+ --delete-delay          find deletions during, delete after
+ --delete-after          receiver deletes after transfer, not before
+ --delete-excluded       also delete excluded files from dest dirs
+
+rclone move "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --include "{testfiles,exampleSHowT}/**" --dry-run
+
+rclone copy --delete-after "NECT-Bornean Frog":/borneanfrog "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --include "testfiles/**" --dry-run
+
+rclone move "NECT-Bornean Frog":/borneanfrog/"testfiles/**" "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" --dry-run
+
+rclone copy "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/myfile/ "NECT-Bornean Frog":/borneanfrog/testfiles --dry-run
+
+
+
+#copy to the osn 
+
+rclone copy ./testfiles "NECT-Bornean Frog":/borneanfrog/testfiles/ -P
+
+
+#copy from one place in remote to 
+rclone move "NECT-Bornean Frog":/borneanfrog/testfiles "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/testfiles -P
+
+
+rclone copy "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/BR2_CKDL210014905-1B_HJLVNDSX2_L1_1.fq.gz "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/BR2 -P
+
+
+#you cant have empty directories on the type of remote we have that is why we cant make directories on the OSN. therefore localy we should create
+#the directory transfer data in and than upload it to the OSN
+
+rclone mkdir BR2
+echo "this is text" > BR2/thisf
+
+rclone copy ./BR2 "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/LM2/ -P
+
+rclone copyto "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/BR2_CKDL210014905-1B_HJLVNDSX2_L1_2.fq.gz "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/BR2 -P
+
+
+rclone copyto "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data" "NECT-Bornean Frog":/borneanfrog/"S parvus RNAseq Data"/LM2 --include "{LM2_CKDL210014907-1B_HJLVNDSX2_L1_1.fq.gz,LM2_CKDL210014907-1B_HJLVNDSX2_L1_2.fq.gz}" -P
