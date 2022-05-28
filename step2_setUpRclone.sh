@@ -95,8 +95,8 @@ endpoint = https://renc.osn.xsede.org
 [NECT-Bornean Frog]
 type = s3
 provider = Ceph
-access_key_id = 8HM0IHHTCYBSWGPMVWM8
-secret_access_key =xK4zkeDlnv6uIN1FrMsZw3tCJ+R9WR
+access_key_id =
+secret_access_key =
 endpoint = https://renc.osn.xsede.org
 
 
